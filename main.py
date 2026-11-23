@@ -16,17 +16,19 @@ import os
 TAB_COUNT = "137"
 
 
-def main() -> None:
-    text = TAB_COUNT
-
-    # Validation guard: the gate requires /output/entry.txt to be UTF-8,
-    # 1-5 characters, digits only, not only whitespace.
+def validate_count(text: str) -> str:
+    """Check the entry text is 1-5 characters, digits only, non-blank."""
+    if not text or not text.strip():
+        raise ValueError("entry must not be blank")
     if not (1 <= len(text) <= 5):
         raise ValueError(f"entry must be 1-5 characters, got {len(text)}")
     if not text.isascii() or not text.isdigit():
         raise ValueError("entry must contain digits only")
-    if not text.strip():
-        raise ValueError("entry must not be only whitespace")
+    return text
+
+
+def main() -> None:
+    text = validate_count(TAB_COUNT)
 
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8") as f:
